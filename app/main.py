@@ -10,7 +10,7 @@ app = FastAPI(
 app.include_router(chat_router)
 
 @app.get('/test') # Whenever a client sends an HTTP GET request to /test, execute the following function.
-async def test_api(): # boz asunc other task will work during this time
+async def test_api(): # bcoz async : other task will work during this time
     return {
         "status": "testing",
         "service": "enterprise-ai-agent-support"

@@ -24,4 +24,4 @@ async def chat(request: ChatRequest) -> ChatResponse:
         status=result["status"]
     )
 
-# -> ChatResponse: this function is expected to return a ChatResponse object
+# -> ChatResponse: that function is expected to return a ChatResponse object

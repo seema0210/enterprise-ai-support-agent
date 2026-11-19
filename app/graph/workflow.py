@@ -19,5 +19,5 @@ def build_graph():
 
 graph = build_graph()
 
-# We can then call methods such as invoke(), ainvoke(), and astream() on the compiled graph.
+# We can call methods such as invoke(), ainvoke(), and astream() on the compiled graph.
 # LangGraph nodes can return partial state updates. LangGraph applies the node's updates to the state.
