@@ -1,19 +1,20 @@
 from langgraph.graph import StateGraph, START, END
 from app.graph.state import AgentState
+from app.services.llm_service import llm_service
 
-def response_node(state: AgentState) -> dict:
-    question = state["question"]
-
+async def llm_node(state: AgentState) -> dict:
+    question = state['question']
+    answer = await llm_service.generate_response(question=question)
     return {
-        "answer": f"Graph received your question: {question}",
-        "status": "success"
+        "answer": answer,
+        "status": "Success"
     }
 
 def build_graph():
-    workflow = StateGraph(AgentState) # creates a graph builder
-    workflow.add_node("response_node", response_node)
-    workflow.add_edge(START, "response_node")
-    workflow.add_edge("response_node", END)
+    workflow = StateGraph(AgentState) # data flowing through its nodes should follow the AgentState structure.
+    workflow.add_node("llm", llm_node)
+    workflow.add_edge(START, "llm")
+    workflow.add_edge("llm", END)
 
     return workflow.compile() # converts our graph definition into an executable graph that can be invoked.
 
