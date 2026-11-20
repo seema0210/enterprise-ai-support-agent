@@ -34,3 +34,5 @@ htmlcov/
 # Local data / generated files
 data/*
 !data/.gitkeep
+
+data/chroma/
