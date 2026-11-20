@@ -5,6 +5,7 @@ from langchain_core.messages import SystemMessage, HumanMessage
 from app.core.config import settings
 from app.core.exceptions import LLMServiceError
 from app.prompts.llm_prompt import SYSTEM_PROMPT
+from app.prompts.rag_prompt import RAG_SYSTEM_PROMPT
 import logging
 
 import httpx
@@ -21,9 +22,16 @@ class LLMService:
             temperature=settings.ollama_temperature
         )
 
-    async def generate_response(self, question: str) -> str:
+    async def generate_response(self, question: str, context: str | None = None) -> str:
 
-        messages = [ SystemMessage(content=SYSTEM_PROMPT), HumanMessage(content=question) ]
+        if context is None:
+            messages = [ SystemMessage(content=SYSTEM_PROMPT), HumanMessage(content=question) ]
+        else:
+            messages = [
+            SystemMessage(content=RAG_SYSTEM_PROMPT),
+            HumanMessage( content=( f"Retrieved context:\n{context}\n\n" f"User question:\n{question}" ) )
+        ]
+
 
         try:
             logger.info("Calling Ollama LLM")
