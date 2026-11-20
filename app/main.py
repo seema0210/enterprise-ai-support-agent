@@ -1,5 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from app.api.routes.chat import router as chat_router
+
+from fastapi.responses import JSONResponse
+from app.core.exceptions import LLMServiceError
 
 app = FastAPI(
     title = "Enterprise AI Support Agent",
@@ -15,3 +18,16 @@ async def test_api(): # bcoz async : other task will work during this time
         "status": "testing",
         "service": "enterprise-ai-agent-support"
     }
+
+@app.exception_handler(LLMServiceError)
+async def llm_service_exception_handler(
+    request: Request,
+    exc: LLMServiceError
+):
+    return JSONResponse(
+        status_code=503,
+        content={
+            "status": "error",
+            "message": str(exc)
+        }
+    )
