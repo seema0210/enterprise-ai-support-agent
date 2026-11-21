@@ -1,5 +1,4 @@
-
-from typing import TypedDict
+from typing import TypedDict, NotRequired
 
 
 class AgentState(TypedDict):
@@ -7,3 +6,5 @@ class AgentState(TypedDict):
     question: str
     answer: str
     status: str
+    route: NotRequired[str]
+    context: NotRequired[str]

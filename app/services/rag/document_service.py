@@ -10,7 +10,7 @@ class DocumentService:
     def load_document(self, file_path:str) -> list[Document]:
 
         path = Path(file_path)
-        if not path.is_file(path):
+        if not path.is_file():
             logger.error("Document not found")
             raise FileNotFoundError("Document not found")
 

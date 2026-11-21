@@ -1,7 +1,7 @@
 
-from app.services.index_service.document_service import DocumentService
-from app.services.index_service.embedding_service import EmbeddingService
-from app.services.index_service.vector_store_service import VectorStoreService
+from app.services.rag.document_service import DocumentService
+from app.services.rag.embedding_service import EmbeddingService
+from app.services.rag.vector_store_service import VectorStoreService
 
 
 class IndexingService:

@@ -1,8 +1,8 @@
 
 from langchain_core.documents import Document
 
-from app.services.index_service.embedding_service import EmbeddingService
-from app.services.index_service.vector_store_service import VectorStoreService
+from app.services.rag.embedding_service import EmbeddingService
+from app.services.rag.vector_store_service import VectorStoreService
 
 
 class RetrieverService:

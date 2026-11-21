@@ -1,0 +1,22 @@
+
+Enterprise AI Support Platform - Sample Support Policy
+
+Refund Policy:
+Customers can request a refund within 30 days of purchase.
+Refund requests must include the order number and reason.
+Approved refunds are processed within 5 business days.
+
+Account Policy:
+Users must verify their email address before activating an account.
+Users can request a password reset through the login page.
+Support staff must not ask users to share their passwords.
+
+Technical Support Policy:
+Technical support is available Monday to Friday.
+Critical system incidents are escalated to the engineering team.
+High-priority incidents require an initial response within 2 hours.
+
+Cancellation Policy:
+Customers can cancel their subscription from account settings.
+Cancellation stops future renewals.
+Existing access continues until the end of the paid billing period.

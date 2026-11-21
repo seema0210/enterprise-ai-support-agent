@@ -7,7 +7,7 @@ from app.core.config import settings
 class EmbeddingService:
 
     def __init__(self):
-        self.model = SentenceTransformer( settings.embedding_model )
+        self.model = SentenceTransformer(settings.embedding_model)
 
     def embed_documents( self, texts: list[str] ) -> list[list[float]]:
 
