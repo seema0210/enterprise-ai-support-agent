@@ -28,7 +28,7 @@ def get_retriever() -> RetrieverService:
 
 async def rag_node(state: AgentState) -> dict:
 
-    question = state["question"]
+    question = state["rewritten_question"]
 
     logger.info("RAG node started")
 

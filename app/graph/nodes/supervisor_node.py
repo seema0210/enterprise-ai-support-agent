@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 async def supervisor_node(state: AgentState) -> dict:
 
-    question = state["question"]
+    question = state["rewritten_question"]
 
     decision = await llm_service.generate_response(
         question=question,
@@ -20,7 +20,7 @@ async def supervisor_node(state: AgentState) -> dict:
 
     route = decision.strip().lower()
 
-    if route not in ("rag", "llm"):
+    if route not in ("rag", "llm", "search"):
         raise ValueError(
             f"Invalid supervisor route: {route!r}"
         )

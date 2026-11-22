@@ -4,11 +4,13 @@ from app.services.llm_service import llm_service
 
 from app.prompts.llm_prompt import SYSTEM_PROMPT
 from app.prompts.rag_prompt import RAG_SYSTEM_PROMPT
+from app.prompts.search_prompt import SEARCH_SYSTEM_PROMPT
 
 
 ROUTE_PROMPTS = {
     "llm": SYSTEM_PROMPT,
-    "rag": RAG_SYSTEM_PROMPT
+    "rag": RAG_SYSTEM_PROMPT,
+    "search": SEARCH_SYSTEM_PROMPT
 }
 
 
