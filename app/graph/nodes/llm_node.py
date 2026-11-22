@@ -5,12 +5,14 @@ from app.services.llm_service import llm_service
 from app.prompts.llm_prompt import SYSTEM_PROMPT
 from app.prompts.rag_prompt import RAG_SYSTEM_PROMPT
 from app.prompts.search_prompt import SEARCH_SYSTEM_PROMPT
+from app.prompts.history_prompt import HISTORY_SYSTEM_PROMPT
 
 
 ROUTE_PROMPTS = {
     "llm": SYSTEM_PROMPT,
     "rag": RAG_SYSTEM_PROMPT,
-    "search": SEARCH_SYSTEM_PROMPT
+    "search": SEARCH_SYSTEM_PROMPT,
+    "history": HISTORY_SYSTEM_PROMPT
 }
 
 
@@ -18,6 +20,7 @@ async def llm_node(state: AgentState) -> dict:
 
     route = state["route"]
     context = state.get("context")
+    history = state.get("history", []) if route == "history" else []
 
     # Select prompt dynamically based on Supervisor route
     system_prompt = ROUTE_PROMPTS.get(route)
@@ -33,9 +36,10 @@ async def llm_node(state: AgentState) -> dict:
         }
 
     answer = await llm_service.generate_response(
-        question=state["question"],
+        question=state["rewritten_question"],
         context=context,
-        system_prompt=system_prompt
+        system_prompt=system_prompt,
+        history=history
     )
 
     return {

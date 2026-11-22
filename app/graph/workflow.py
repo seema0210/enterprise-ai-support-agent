@@ -7,6 +7,8 @@ from app.graph.nodes.supervisor_node import supervisor_node
 from app.graph.nodes.rag_node import rag_node
 from app.graph.nodes.search_node import search_node
 from app.graph.nodes.llm_node import llm_node
+from app.graph.nodes.history_node import history_node
+from app.graph.nodes.save_node import save_node
 
 
 def build_graph():
@@ -17,7 +19,9 @@ def build_graph():
     workflow.add_node("supervisor", supervisor_node)
     workflow.add_node("rag", rag_node)
     workflow.add_node("search", search_node)
+    workflow.add_node("history", history_node)
     workflow.add_node("llm", llm_node)
+    workflow.add_node("save", save_node)
 
     # Start with question rewriting
     workflow.add_edge(START, "rewrite")
@@ -32,15 +36,18 @@ def build_graph():
         {
             "rag": "rag",
             "llm": "llm",
-            "search": "search"
+            "search": "search",
+            "history": "history"
         }
     )
 
     # End after RAG execution
     workflow.add_edge("rag", "llm")
     workflow.add_edge("search", "llm")
+    workflow.add_edge("history", "llm")
 
-    workflow.add_edge("llm", END)
+    workflow.add_edge("llm", "save")
+    workflow.add_edge("save", END)
 
     return workflow.compile() # converts our graph definition into an executable graph that can be invoked.
 

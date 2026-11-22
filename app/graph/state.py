@@ -9,3 +9,4 @@ class AgentState(TypedDict):
     route: NotRequired[str]
     context: NotRequired[str]
     rewritten_question: NotRequired[str]
+    history: NotRequired[list[dict[str, str]]]

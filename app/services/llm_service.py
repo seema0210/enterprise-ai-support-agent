@@ -28,6 +28,7 @@ class LLMService:
         self,
         question: str,
         context: str | None = None,
+        history: str | None = None,
         system_prompt: str = SYSTEM_PROMPT
     ) -> str:
 
@@ -35,6 +36,9 @@ class LLMService:
 
         if context is not None:
             user_content = ( f"Retrieved context:\n{context}\n\n" f"User question:\n{question}" )
+        
+        if history is not None:
+            user_content = ( f"Retrieved context:\n{history}\n\n" f"User question:\n{question}" )
 
         messages = [ SystemMessage(content=system_prompt), HumanMessage(content=user_content) ]
 
