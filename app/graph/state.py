@@ -10,3 +10,4 @@ class AgentState(TypedDict):
     context: NotRequired[str]
     rewritten_question: NotRequired[str]
     history: NotRequired[list[dict[str, str]]]
+    summary: NotRequired[str]

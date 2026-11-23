@@ -10,14 +10,23 @@ from app.db.chat_repository import ChatRepository
 logger = logging.getLogger(__name__)
 
 
-def load_history(session_id: str) -> list[dict[str, str]]:
+def load_history(session_id: str) -> dict:
 
     with SessionLocal() as db:
         repository = ChatRepository(db)
 
-        messages = repository.get_recent_messages( session_id=session_id, limit=10 )
+        saved_summary = repository.get_summary(session_id)
 
-        return [
+        summary = saved_summary.summary if saved_summary else ""
+
+        last_message_id = ( saved_summary.last_message_id if saved_summary else 0 )
+
+        messages = repository.get_messages_after(
+            session_id=session_id,
+            last_message_id=last_message_id
+        )
+
+        history = [
             {
                 "role": item.role,
                 "message": item.message
@@ -25,13 +34,24 @@ def load_history(session_id: str) -> list[dict[str, str]]:
             for item in messages
         ]
 
+        return {
+            "summary": summary,
+            "history": history
+        }
+
 
 async def history_node(state: AgentState) -> dict:
 
     logger.info("History node started")
 
-    history = await asyncio.to_thread( load_history, state["session_id"] )
+    result = await asyncio.to_thread(
+        load_history,
+        state["session_id"]
+    )
 
-    logger.info("Loaded %d history messages", len(history))
+    logger.info(
+        "Loaded %d recent messages",
+        len(result["history"])
+    )
 
-    return {"history": history}
+    return result

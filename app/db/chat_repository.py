@@ -2,7 +2,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app.db.models import ChatMessage
+from app.db.models import ChatMessage, ChatSummary
 
 
 class ChatRepository:
@@ -39,3 +39,51 @@ class ChatRepository:
         messages = self.db.scalars(statement).all()
 
         return list(reversed(messages))
+
+    
+    def get_summary(self, session_id: str) -> ChatSummary | None:
+
+        statement = select(ChatSummary).where( ChatSummary.session_id == session_id )
+
+        return self.db.scalar(statement)
+
+
+    def get_messages_after( self, session_id: str, last_message_id: int ) -> list[ChatMessage]:
+
+        statement = (
+            select(ChatMessage)
+            .where(
+                ChatMessage.session_id == session_id,
+                ChatMessage.id > last_message_id
+            )
+            .order_by(ChatMessage.id.asc())
+        )
+
+        return list(self.db.scalars(statement).all())
+
+
+    def save_summary( self, session_id: str, summary_text: str, last_message_id: int ) -> ChatSummary:
+
+        chat_summary = self.get_summary(session_id)
+
+        if chat_summary is None:
+            chat_summary = ChatSummary(
+                session_id=session_id,
+                summary=summary_text,
+                last_message_id=last_message_id
+            )
+            self.db.add(chat_summary)
+
+        else:
+            chat_summary.summary = summary_text
+            chat_summary.last_message_id = last_message_id
+
+        self.db.commit()
+        self.db.refresh(chat_summary)
+
+        return chat_summary
+
+
+
+
+    
