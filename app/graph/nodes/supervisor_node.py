@@ -20,7 +20,7 @@ async def supervisor_node(state: AgentState) -> dict:
 
     route = decision.strip().lower()
 
-    if route not in ("rag", "llm", "search", "history"):
+    if route not in ("rag", "llm", "search", "history", "tools"):
         raise ValueError(
             f"Invalid supervisor route: {route!r}"
         )

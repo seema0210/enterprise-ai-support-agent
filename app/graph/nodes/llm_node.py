@@ -7,6 +7,7 @@ from app.prompts.rag_prompt import RAG_SYSTEM_PROMPT
 from app.prompts.search_prompt import SEARCH_SYSTEM_PROMPT
 from app.prompts.history_prompt import HISTORY_SYSTEM_PROMPT
 from app.prompts.summary_prompt import SUMMARY_PROMPT
+from app.prompts.tool_prompt import TOOL_SYSTEM_PROMPT
 
 
 ROUTE_PROMPTS = {
@@ -14,7 +15,8 @@ ROUTE_PROMPTS = {
     "rag": RAG_SYSTEM_PROMPT,
     "search": SEARCH_SYSTEM_PROMPT,
     "history": HISTORY_SYSTEM_PROMPT,
-    "summary": SUMMARY_PROMPT
+    "summary": SUMMARY_PROMPT,
+    "tools": TOOL_SYSTEM_PROMPT
 }
 
 
@@ -45,50 +47,6 @@ async def llm_node(state: AgentState) -> dict:
         system_prompt=system_prompt,
         history=history,
         summary=summary
-    )
-
-    return {
-        "answer": answer,
-        "status": "success"
-    }
-from app.prompts.history_prompt import HISTORY_SYSTEM_PROMPT
-
-
-ROUTE_PROMPTS = {
-    "llm": SYSTEM_PROMPT,
-    "rag": RAG_SYSTEM_PROMPT,
-    "search": SEARCH_SYSTEM_PROMPT,
-    "history": HISTORY_SYSTEM_PROMPT,
-    "summary": SUMMARY_PROMPT
-}
-
-
-async def llm_node(state: AgentState) -> dict:
-
-    route = state["route"]
-    context = state.get("context")
-    history = state.get("history", []) if route == "history" else []
-    summary = ( state.get("summary", "") if route == "history" else ""
-)
-
-    # Select prompt dynamically based on Supervisor route
-    system_prompt = ROUTE_PROMPTS.get(route)
-
-    if system_prompt is None:
-        raise ValueError(f"Unsupported LLM route: {route}")
-
-    # RAG requires retrieved context
-    if route == "rag" and not context:
-        return {
-            "answer": "I could not find the answer in the provided documents.",
-            "status": "success"
-        }
-
-    answer = await llm_service.generate_response(
-        question=state["rewritten_question"],
-        context=context,
-        system_prompt=system_prompt,
-        history=history
     )
 
     return {

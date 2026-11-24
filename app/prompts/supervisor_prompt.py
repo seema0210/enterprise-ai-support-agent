@@ -23,6 +23,14 @@ llm:
 Select when the question can be answered using general
 knowledge without external information.
 
+tools:
+Select when the user's request requires executing
+an available tool, such as performing a calculation
+or a specific supported operation.
+
+Do not select tools for general explanations
+that can be answered directly by the LLM.
+
 Rules:
 - Understand the user's intent.
 - If the question clearly depends on previous conversation,
@@ -31,5 +39,5 @@ Rules:
   information required.
 - Do not answer the question.
 - Return exactly one lowercase word:
-  history, rag, search, or llm.
+  rag, search, history, llm, tools
 """
