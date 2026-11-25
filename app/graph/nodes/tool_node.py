@@ -4,17 +4,22 @@ from app.graph.state import AgentState
 from app.tools.calculator_tool import calculate_percentage
 from app.tools.addition_tool import add_numbers
 
-logger = logging.getLogger(__name__)
+from app.services.mcp_service import mcp_service
 
-AVAILABLE_TOOLS = {
-    calculate_percentage.name: calculate_percentage,
-    add_numbers.name: add_numbers
-}
+logger = logging.getLogger(__name__)
 
 
 async def tool_node(state: AgentState) -> dict:
 
     logger.info("Tool execution started")
+
+    mcp_tools = await mcp_service.get_tools()
+
+    available_tools = {
+        calculate_percentage.name: calculate_percentage,
+        add_numbers.name: add_numbers,
+        **{tool.name: tool for tool in mcp_tools}
+    }
 
     tool_calls = state.get("tool_calls", [])
 
@@ -27,7 +32,7 @@ async def tool_node(state: AgentState) -> dict:
         tool_name = tool_call["name"]
         tool_args = tool_call["args"]
 
-        selected_tool = AVAILABLE_TOOLS.get(tool_name)
+        selected_tool = available_tools.get(tool_name)
 
         if selected_tool is None:
             raise ValueError(f"Unknown tool: {tool_name}")
